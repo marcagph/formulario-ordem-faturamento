@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ordem de Faturamento — Grupo Prestarh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary:     #F05A28;
+  --primary-lt:  #FDE8E0;
+  --dark:        #1A2A4E;
+  --dark-md:     #2D4270;
+  --dark-lt:     #EEF1F8;
+  --gray-field:  #F0F2F7;
+  --gray-line:   #E2E6F0;
+  --white:       #FFFFFF;
+  --text-muted:  #6B7A99;
+  --radius:      10px;
+  --radius-sm:   6px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #F4F6FB;
+  color: var(--dark);
+  min-height: 100vh;
+  padding: 32px 16px 60px;
+}
+
+/* ── TOPBAR ── */
+.tabs { display: flex; gap: 8px; flex: 1; flex-wrap: wrap; }
+.tab-btn {
+  flex: 1; min-width: 160px; padding: 12px 20px;
+  border: 2px solid var(--gray-line); border-radius: var(--radius);
+  font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600;
+  letter-spacing: .03em; cursor: pointer; background: var(--white);
+  color: var(--text-muted); transition: all .18s;
+}
+.tab-btn.active { background: var(--dark); color: var(--white); border-color: var(--dark); }
+.tab-btn:not(.active):hover { border-color: var(--dark-md); color: var(--dark); }
+
+.action-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.print-btn, .share-btn {
+  display: flex; align-items: center; gap: 6px; padding: 10px 18px;
+  color: var(--white); border: none; border-radius: 8px;
+  font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: opacity .15s; white-space: nowrap;
+}
+.print-btn    { background: var(--primary); }
+.whatsapp-btn { background: #25D366; }
+.print-btn:hover, .share-btn:hover { opacity: .88; }
+.print-btn svg, .share-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+.print-btn:disabled, .share-btn:disabled { opacity: .6; cursor: not-allowed; }
+
+.topbar {
+  display: flex; gap: 12px; max-width: 820px;
+  margin: 0 auto 20px; align-items: flex-start; flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* ── CARD ── */
+.card {
+  max-width: 820px; margin: 0 auto; background: var(--white);
+  border-radius: 16px; box-shadow: 0 4px 24px rgba(26,42,78,.10); overflow: hidden;
+}
+
+.card-header {
+  background: var(--dark); padding: 22px 32px;
+  display: flex; justify-content: space-between; align-items: center; gap: 16px;
+}
+.header-title     { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.header-arrow     { color: var(--primary); font-size: 26px; line-height: 1; }
+.header-doc-title { color: var(--white); font-size: 22px; font-weight: 800; letter-spacing: .02em; white-space: nowrap; }
+.header-logo      { text-align: right; flex-shrink: 0; white-space: nowrap; }
+.logo-name { color: var(--white); font-size: 14px; font-weight: 700; letter-spacing: .02em; }
+.logo-sub  { color: var(--primary); font-size: 10px; font-weight: 500; letter-spacing: .02em; margin-top: 2px; }
+
+.card-body { padding: 28px 32px 36px; }
+
+/* ── SEÇÕES ── */
+.section-title { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.section-icon {
+  width: 22px; height: 22px; background: var(--primary); border-radius: 5px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.section-icon svg { width: 12px; height: 12px; fill: white; }
+.section-label { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--dark); }
+
+/* ── CAMPOS IDENTIFICAÇÃO ── */
+.fields-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.field-row   { display: flex; align-items: center; gap: 12px; }
+.field-label { font-size: 12px; font-weight: 600; color: var(--text-muted); min-width: 170px; }
+.field-input {
+  flex: 1; background: var(--gray-field); border: 1.5px solid transparent;
+  border-radius: var(--radius-sm); padding: 9px 14px;
+  font-family: 'Inter', sans-serif; font-size: 13px; color: var(--dark);
+  outline: none; transition: border-color .15s, background .15s;
+}
+.field-input:focus { border-color: var(--primary); background: var(--white); }
+.date-field { max-width: 200px; flex: none; }
+select.field-input { cursor: pointer; appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%236B7A99'><path d='M4 6l4 4 4-4H4z'/></svg>");
+  background-repeat: no-repeat; background-position: right 12px center; padding-right: 34px; }
+
+/* ── DIVISOR ── */
+.divider      { height: 2px; background: var(--primary); border-radius: 2px; margin: 16px 0; }
+.divider.full { margin: 20px 0; }
+
+/* ── LEGENDA ── */
+.legenda { background: var(--dark-lt); border-radius: var(--radius-sm); padding: 14px 18px; margin-top: 20px; }
+.legenda-title {
+  font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--dark); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+}
+.legenda-title::before { content: ''; display: block; width: 3px; height: 14px; background: var(--primary); border-radius: 2px; }
+.legenda-item { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+.legenda-item strong { color: var(--primary); }
+
+/* ── PÁGINAS ── */
+.page        { display: none; }
+.page.active { display: block; }
+
+@media (max-width: 560px) {
+  .field-row { flex-direction: column; align-items: stretch; }
+  .field-label { min-width: 0; }
+  .date-field { max-width: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="action-btns">
+    <button class="print-btn" id="btnPDF" onclick="baixarPDF()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+        <rect x="6" y="14" width="12" height="8"/>
+      </svg>
+      PDF
+    </button>
+    <button class="share-btn whatsapp-btn" id="btnWpp" onclick="compartilharWhatsApp()">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+        <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.85L0 24l6.335-1.652A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-4.964-1.345l-.356-.211-3.762.981.999-3.671-.232-.376A9.818 9.818 0 1112 21.818z"/>
+      </svg>
+      WhatsApp
+    </button>
+    <button class="print-btn" id="btnEmail" style="background:var(--dark-md)" onclick="enviarEmail()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/>
+      </svg>
+      E-mail
+    </button>
+  </div>
+</div>
+
+<div class="card" id="formCard">
+
+  <!-- ══════════ PÁGINA 1 ══════════ -->
+  <div class="page active" id="page1">
+    <div class="card-header">
+      <div class="header-title">
+        <span class="header-arrow">►</span>
+        <span class="header-doc-title">ORDEM DE FATURAMENTO</span>
+      </div>
+      <div class="header-logo">
+        <div class="logo-name">Grupo Prestarh</div>
+        <div class="logo-sub">Foco em gente e resultado</div>
+      </div>
+    </div>
+    <div class="card-body">
+
+      <div class="section-title">
+        <div class="section-icon">
+          <svg viewBox="0 0 16 16"><path d="M2 4h12v1.5H2V4zm0 3h8v1.5H2V7zm0 3h10v1.5H2V10z"/></svg>
+        </div>
+        <span class="section-label">Dados do Cliente</span>
+      </div>
+
+      <div class="fields-grid">
+        <div class="field-row">
+          <label class="field-label">Nº da Ordem:</label>
+          <input class="field-input" type="text" autocomplete="off">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Data:</label>
+          <input class="field-input date-field" type="text" placeholder="DD/MM/AAAA" maxlength="10" autocomplete="off">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Razão social do cliente:</label>
+          <input class="field-input" type="text" autocomplete="off">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Endereço completo:</label>
+          <input class="field-input" type="text" autocomplete="off">
+        </div>
+        <div class="field-row">
+          <label class="field-label">E-mail de cobrança:</label>
+          <input class="field-input" type="email" autocomplete="off">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Centro de custo:</label>
+          <input class="field-input" type="text" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-title">
+        <div class="section-icon">
+          <svg viewBox="0 0 16 16"><path d="M8 1l1.9 3.9L14 5.5l-3 2.9.7 4.1L8 10.6l-3.7 1.9.7-4.1-3-2.9 4.1-.6L8 1z"/></svg>
+        </div>
+        <span class="section-label">Dados do Comercial</span>
+      </div>
+
+      <div class="fields-grid">
+        <div class="field-row">
+          <label class="field-label">Percentual da Comissão comercial:</label>
+          <input class="field-input" type="text" placeholder="%" autocomplete="off">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Responsável pelo comercial:</label>
+          <select class="field-input">
+            <option value="" selected disabled>Selecione</option>
+            <option value="Elaine Sol">Elaine Sol</option>
+            <option value="Victoria">Victoria</option>
+            <option value="Luciana">Luciana</option>
+            <option value="Thiago">Thiago</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-title">
+        <div class="section-icon">
+          <svg viewBox="0 0 16 16"><path d="M8 0a3 3 0 0 1 3 3v1h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3V3a3 3 0 0 1 3-3zm0 1.5A1.5 1.5 0 0 0 6.5 3v1h3V3A1.5 1.5 0 0 0 8 1.5z"/></svg>
+        </div>
+        <span class="section-label">Dados da Vaga e do Candidato</span>
+      </div>
+
+      <div class="fields-grid">
+        <div class="field-row">
+          <label class="field-label">Serviço prestado:</label>
+          <input class="field-input" type="text" autocomplete="off">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Nome do candidato escolhido:</label>
+          <input class="field-input" type="text" autocomplete="off">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Salário contratual:</label>
+          <input class="field-input" type="text" placeholder="R$" autocomplete="off">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Data:</label>
+          <input class="field-input date-field" type="text" placeholder="DD/MM/AAAA" maxlength="10" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-title">
+        <div class="section-icon">
+          <svg viewBox="0 0 16 16"><path d="M8 0a1 1 0 0 1 1 1v1.06A5.5 5.5 0 0 1 13.94 7H15a1 1 0 1 1 0 2h-1.06A5.5 5.5 0 0 1 9 13.94V15a1 1 0 1 1-2 0v-1.06A5.5 5.5 0 0 1 2.06 9H1a1 1 0 1 1 0-2h1.06A5.5 5.5 0 0 1 7 2.06V1a1 1 0 0 1 1-1zm0 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/></svg>
+        </div>
+        <span class="section-label">Valores e Taxas</span>
+      </div>
+
+      <div class="fields-grid">
+        <div class="field-row">
+          <label class="field-label">Taxa negociada:</label>
+          <input class="field-input" type="text" placeholder="%" autocomplete="off">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Valor total de R&amp;S:</label>
+          <input class="field-input" type="text" placeholder="R$" autocomplete="off">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Taxa de abertura do R&amp;S:</label>
+          <input class="field-input" type="text" placeholder="R$" autocomplete="off">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Taxa de fechamento do R&amp;S:</label>
+          <input class="field-input" type="text" placeholder="R$" autocomplete="off">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Taxa da Avaliação Psicológica:</label>
+          <input class="field-input" type="text" placeholder="R$" autocomplete="off">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Impostos:</label>
+          <input class="field-input" type="text" placeholder="R$ / %" autocomplete="off">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Valor total referente a esta OS a ser faturado:</label>
+          <input class="field-input" type="text" placeholder="R$" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-title">
+        <div class="section-icon">
+          <svg viewBox="0 0 16 16"><path d="M2 2h12a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm1 3v1.5h10V5H3zm0 3v1.5h10V8H3zm0 3v1.5h6V11H3z"/></svg>
+        </div>
+        <span class="section-label">Observações</span>
+      </div>
+
+      <textarea class="ca-field" placeholder="Escreva aqui observações adicionais..." style="min-height:80px"></textarea>
+
+      <div class="legenda">
+        <div class="legenda-title">Atenção</div>
+        <div class="legenda-item">Confira os valores antes de enviar. Este documento é gerado automaticamente a partir dos dados preenchidos no formulário.</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ── CONFIGURAÇÃO ── */
+var TOTAL_PAGES      = 1;
+var TEXTAREA_CLASSES = '.sci-field, .ca-field';
+var nomeArquivo      = 'Ordem_de_Faturamento.pdf';
+/* ──────────────────────────────────── */
+
+function showPage(n, btn) {
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('page' + n).classList.add('active');
+  btn.classList.add('active');
+}
+
+function autoResize(el) {
+  el.style.height = '1px';
+  el.style.height = el.scrollHeight + 'px';
+}
+
+function setupDateMask(field) {
+  field.addEventListener('input', function() {
+    var digits = this.value.replace(/\D/g, '').slice(0, 8);
+    var f = '';
+    if (digits.length > 0) f += digits.slice(0, 2);
+    if (digits.length > 2) f += '/' + digits.slice(2, 4);
+    if (digits.length > 4) f += '/' + digits.slice(4, 8);
+    this.value = f;
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll(TEXTAREA_CLASSES).forEach(function(ta) {
+    ta.addEventListener('input',  function() { autoResize(this); });
+    ta.addEventListener('paste',  function() { setTimeout(function() { autoResize(ta); }, 0); });
+    ta.addEventListener('change', function() { autoResize(this); });
+    autoResize(ta);
+  });
+  document.querySelectorAll('.date-field').forEach(setupDateMask);
+});
+
+async function gerarPDFBlob() {
+  var jsPDF  = window.jspdf.jsPDF;
+  var topbar = document.querySelector('.topbar');
+  var card   = document.getElementById('formCard');
+
+  await document.fonts.ready;
+
+  var paginaAtiva = (document.querySelector('.page.active') || document.getElementById('page1')).id;
+
+  topbar.style.visibility = 'hidden';
+  card.style.maxWidth     = '820px';
+  card.style.width        = '820px';
+
+  var A4_W     = 210;
+  var captures = [];
+
+  for (var i = 1; i <= TOTAL_PAGES; i++) {
+
+    document.querySelectorAll('.page').forEach(function(p) { p.style.display = 'none'; });
+    var pageEl = document.getElementById('page' + i);
+    pageEl.style.display = 'block';
+
+    await new Promise(function(r) { setTimeout(r, 350); });
+
+    var inputValues = [];
+    pageEl.querySelectorAll('.field-input').forEach(function(inp) {
+      inputValues.push(inp.value);
+    });
+
+    var textareaValues = [];
+    pageEl.querySelectorAll(TEXTAREA_CLASSES).forEach(function(ta) {
+      textareaValues.push(ta.value);
+    });
+
+    var pageIndex = i;
+
+    var canvas = await html2canvas(pageEl, {
+      scale:           2,
+      useCORS:         true,
+      allowTaint:      true,
+      backgroundColor: '#ffffff',
+      logging:         false,
+      windowWidth:     820,
+
+      onclone: function(clonedDoc) {
+        var cp = clonedDoc.getElementById('page' + pageIndex);
+        if (!cp) return;
+
+        cp.querySelectorAll('.field-input').forEach(function(el, idx) {
+          var d = clonedDoc.createElement('div');
+          d.className          = el.className;
+          d.style.display      = 'flex';
+          d.style.alignItems   = 'center';
+          d.style.whiteSpace   = 'nowrap';
+          d.style.overflow     = 'hidden';
+          d.style.textOverflow = 'ellipsis';
+          d.textContent = inputValues[idx] || '';
+          el.parentNode.replaceChild(d, el);
+        });
+
+        cp.querySelectorAll(TEXTAREA_CLASSES).forEach(function(el, idx) {
+          var d = clonedDoc.createElement('div');
+          d.className        = el.className;
+          d.style.height     = 'auto';
+          d.style.overflow   = 'visible';
+          d.style.whiteSpace = 'pre-wrap';
+          d.style.wordBreak  = 'break-word';
+          d.textContent = textareaValues[idx] || '';
+          el.parentNode.replaceChild(d, el);
+        });
+      }
+    });
+
+    captures.push({
+      imgData:  canvas.toDataURL('image/png'),
+      heightMm: (canvas.height / canvas.width) * A4_W
+    });
+  }
+
+  var pdf = new jsPDF({
+    orientation: 'portrait',
+    unit:        'mm',
+    format:      [A4_W, captures[0].heightMm]
+  });
+
+  pdf.addImage(captures[0].imgData, 'PNG', 0, 0, A4_W, captures[0].heightMm, undefined, 'FAST');
+
+  for (var j = 1; j < captures.length; j++) {
+    pdf.addPage([A4_W, captures[j].heightMm]);
+    pdf.addImage(captures[j].imgData, 'PNG', 0, 0, A4_W, captures[j].heightMm, undefined, 'FAST');
+  }
+
+  topbar.style.visibility = '';
+  card.style.maxWidth     = '';
+  card.style.width        = '';
+  document.querySelectorAll('.page').forEach(function(p) { p.style.display = ''; });
+  document.getElementById(paginaAtiva).classList.add('active');
+  var num = parseInt(paginaAtiva.replace('page', '')) - 1;
+  document.querySelectorAll('.tab-btn').forEach(function(b, idx) {
+    b.classList.toggle('active', idx === num);
+  });
+
+  return pdf.output('blob');
+}
+
+async function baixarPDF() {
+  var btn = document.getElementById('btnPDF');
+  var orig = btn.innerHTML;
+  btn.innerHTML = '⏳ Gerando…';
+  btn.disabled  = true;
+  try {
+    var blob = await gerarPDFBlob();
+    var url  = URL.createObjectURL(blob);
+    var a    = document.createElement('a');
+    a.href = url; a.download = nomeArquivo; a.click();
+    URL.revokeObjectURL(url);
+  } catch(e) {
+    alert('Não foi possível gerar o PDF. Tente novamente.');
+  }
+  btn.innerHTML = orig;
+  btn.disabled  = false;
+}
+
+async function compartilharWhatsApp() {
+  var btn = document.getElementById('btnWpp');
+  var orig = btn.innerHTML;
+  btn.innerHTML = '⏳ Gerando…';
+  btn.disabled  = true;
+  try {
+    var blob    = await gerarPDFBlob();
+    var arquivo = new File([blob], nomeArquivo, { type: 'application/pdf' });
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [arquivo] })) {
+      await navigator.share({ title: nomeArquivo.replace('.pdf',''), files: [arquivo] });
+    } else {
+      var url = URL.createObjectURL(blob);
+      var a   = document.createElement('a');
+      a.href = url; a.download = nomeArquivo; a.click();
+      URL.revokeObjectURL(url);
+      setTimeout(function() { window.open('https://web.whatsapp.com', '_blank'); }, 800);
+    }
+  } catch(e) {
+    if (e.name !== 'AbortError') alert('Não foi possível gerar o PDF. Tente novamente.');
+  }
+  btn.innerHTML = orig;
+  btn.disabled  = false;
+}
+
+async function enviarEmail() {
+  var btn = document.getElementById('btnEmail');
+  var orig = btn.innerHTML;
+  btn.innerHTML = '⏳ Gerando…';
+  btn.disabled  = true;
+  try {
+    var blob = await gerarPDFBlob();
+    var url  = URL.createObjectURL(blob);
+    var a    = document.createElement('a');
+    a.href = url; a.download = nomeArquivo; a.click();
+    URL.revokeObjectURL(url);
+    setTimeout(function() {
+      window.location.href = 'mailto:?subject=' + encodeURIComponent('Ordem de Faturamento') +
+        '&body=' + encodeURIComponent('Segue em anexo a Ordem de Faturamento (arquivo baixado: ' + nomeArquivo + ').');
+    }, 800);
+  } catch(e) {
+    alert('Não foi possível gerar o PDF. Tente novamente.');
+  }
+  btn.innerHTML = orig;
+  btn.disabled  = false;
+}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</body>
+</html>
