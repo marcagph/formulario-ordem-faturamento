@@ -6,28 +6,32 @@
 <title>Ordem de Faturamento — Grupo Prestarh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --primary:     #F05A28;
-  --primary-lt:  #FDE8E0;
-  --dark:        #1A2A4E;
-  --dark-md:     #2D4270;
+  --primary:     #FF671D;   /* laranja institucional */
+  --primary-lt:  #FFF1E9;   /* pêssego de destaque */
+  --dark:        #222D58;   /* azul institucional */
+  --dark-md:     #34407A;
   --dark-lt:     #EEF1F8;
-  --gray-field:  #F0F2F7;
-  --gray-line:   #E2E6F0;
+  --gray-field:  #F5F6F7;   /* fundo de campo */
+  --gray-line:   #E8E8E8;   /* divisórias */
   --white:       #FFFFFF;
-  --text-muted:  #6B7A99;
+  --text:        #202124;   /* texto principal */
+  --text-muted:  #767676;   /* texto secundário */
+  --success:     #24A36A;
+  --success-lt:  #EAF7F1;
   --radius:      10px;
   --radius-sm:   6px;
+  --radius-lg:   14px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Manrope', sans-serif;
   background: #F4F6FB;
-  color: var(--dark);
+  color: var(--text);
   min-height: 100vh;
   padding: 32px 16px 60px;
 }
@@ -37,7 +41,7 @@ body {
 .tab-btn {
   flex: 1; min-width: 160px; padding: 12px 20px;
   border: 2px solid var(--gray-line); border-radius: var(--radius);
-  font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600;
+  font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 600;
   letter-spacing: .03em; cursor: pointer; background: var(--white);
   color: var(--text-muted); transition: all .18s;
 }
@@ -48,7 +52,7 @@ body {
 .print-btn, .share-btn {
   display: flex; align-items: center; gap: 6px; padding: 10px 18px;
   color: var(--white); border: none; border-radius: 8px;
-  font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600;
+  font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 600;
   cursor: pointer; transition: opacity .15s; white-space: nowrap;
 }
 .print-btn    { background: var(--primary); }
@@ -70,15 +74,15 @@ body {
 }
 
 .card-header {
-  background: var(--dark); padding: 22px 32px;
+  background: var(--dark); padding: 22px 32px 20px;
   display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  border-bottom: 4px solid var(--primary);
 }
 .header-title     { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .header-arrow     { color: var(--primary); font-size: 26px; line-height: 1; }
 .header-doc-title { color: var(--white); font-size: 22px; font-weight: 800; letter-spacing: .02em; white-space: nowrap; }
 .header-logo      { text-align: right; flex-shrink: 0; white-space: nowrap; }
-.logo-name { color: var(--white); font-size: 14px; font-weight: 700; letter-spacing: .02em; }
-.logo-sub  { color: var(--primary); font-size: 10px; font-weight: 500; letter-spacing: .02em; margin-top: 2px; }
+.header-logo img  { height: 26px; width: auto; display: block; }
 
 .card-body { padding: 28px 32px 36px; }
 
@@ -96,29 +100,39 @@ body {
 .field-row   { display: flex; align-items: center; gap: 12px; }
 .field-label { font-size: 12px; font-weight: 600; color: var(--text-muted); min-width: 170px; }
 .field-input {
-  flex: 1; background: var(--gray-field); border: 1.5px solid transparent;
+  flex: 1; background: var(--gray-field); border: 1px solid var(--gray-line);
   border-radius: var(--radius-sm); padding: 9px 14px;
-  font-family: 'Inter', sans-serif; font-size: 13px; color: var(--dark);
+  font-family: 'Manrope', sans-serif; font-size: 13px; color: var(--text);
   outline: none; transition: border-color .15s, background .15s;
 }
 .field-input:focus { border-color: var(--primary); background: var(--white); }
 .date-field { max-width: 200px; flex: none; }
 select.field-input { cursor: pointer; appearance: none;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%236B7A99'><path d='M4 6l4 4 4-4H4z'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23767676'><path d='M4 6l4 4 4-4H4z'/></svg>");
   background-repeat: no-repeat; background-position: right 12px center; padding-right: 34px; }
+
+/* ── TEXTAREA (observações) ── */
+.ca-field {
+  background: var(--gray-field); border: 1px solid var(--gray-line);
+  border-radius: var(--radius-sm); min-height: 80px; height: auto; overflow: hidden; resize: none;
+  width: 100%; padding: 10px 14px; font-family: 'Manrope', sans-serif;
+  font-size: 13px; color: var(--text); outline: none; line-height: 1.5;
+  transition: border-color .15s, background .15s; display: block;
+}
+.ca-field:focus { border-color: var(--primary); background: var(--white); }
 
 /* ── DIVISOR ── */
 .divider      { height: 2px; background: var(--primary); border-radius: 2px; margin: 16px 0; }
 .divider.full { margin: 20px 0; }
 
-/* ── LEGENDA ── */
-.legenda { background: var(--dark-lt); border-radius: var(--radius-sm); padding: 14px 18px; margin-top: 20px; }
+/* ── LEGENDA (caixa de destaque) ── */
+.legenda { background: var(--primary-lt); border-radius: var(--radius-lg); padding: 14px 18px; margin-top: 20px; }
 .legenda-title {
   font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
-  color: var(--dark); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+  color: var(--primary); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
 }
 .legenda-title::before { content: ''; display: block; width: 3px; height: 14px; background: var(--primary); border-radius: 2px; }
-.legenda-item { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+.legenda-item { font-size: 12px; color: var(--text); line-height: 1.6; }
 .legenda-item strong { color: var(--primary); }
 
 /* ── PÁGINAS ── */
@@ -169,8 +183,7 @@ select.field-input { cursor: pointer; appearance: none;
         <span class="header-doc-title">ORDEM DE FATURAMENTO</span>
       </div>
       <div class="header-logo">
-        <div class="logo-name">Grupo Prestarh</div>
-        <div class="logo-sub">Foco em gente e resultado</div>
+        <img src="assets/logo-prestarh-branca.png" alt="Grupo Prestarh">
       </div>
     </div>
     <div class="card-body">
@@ -188,7 +201,7 @@ select.field-input { cursor: pointer; appearance: none;
           <input class="field-input" type="text" autocomplete="off">
         </div>
         <div class="field-row">
-          <label class="field-label">Data:</label>
+          <label class="field-label">Data da Ordem:</label>
           <input class="field-input date-field" type="text" placeholder="DD/MM/AAAA" maxlength="10" autocomplete="off">
         </div>
         <div class="field-row">
@@ -221,7 +234,7 @@ select.field-input { cursor: pointer; appearance: none;
       <div class="fields-grid">
         <div class="field-row">
           <label class="field-label">Percentual da Comissão comercial:</label>
-          <input class="field-input" type="text" placeholder="%" autocomplete="off">
+          <input class="field-input percent-field" type="text" placeholder="0%" inputmode="decimal" autocomplete="off">
         </div>
         <div class="field-row">
           <label class="field-label">Responsável pelo comercial:</label>
@@ -250,12 +263,20 @@ select.field-input { cursor: pointer; appearance: none;
           <input class="field-input" type="text" autocomplete="off">
         </div>
         <div class="field-row">
+          <label class="field-label">Vaga trabalhada:</label>
+          <input class="field-input" type="text" autocomplete="off">
+        </div>
+        <div class="field-row">
           <label class="field-label">Nome do candidato escolhido:</label>
           <input class="field-input" type="text" autocomplete="off">
         </div>
         <div class="field-row">
-          <label class="field-label">Salário contratual:</label>
-          <input class="field-input" type="text" placeholder="R$" autocomplete="off">
+          <label class="field-label">Salário de abertura:</label>
+          <input class="field-input currency-field" type="text" placeholder="R$ 0,00" inputmode="decimal" autocomplete="off">
+        </div>
+        <div class="field-row">
+          <label class="field-label">Salário de fechamento:</label>
+          <input class="field-input currency-field" type="text" placeholder="R$ 0,00" inputmode="decimal" autocomplete="off">
         </div>
         <div class="field-row">
           <label class="field-label">Data:</label>
@@ -275,31 +296,31 @@ select.field-input { cursor: pointer; appearance: none;
       <div class="fields-grid">
         <div class="field-row">
           <label class="field-label">Taxa negociada:</label>
-          <input class="field-input" type="text" placeholder="%" autocomplete="off">
+          <input class="field-input percent-field" type="text" placeholder="0%" inputmode="decimal" autocomplete="off">
         </div>
         <div class="field-row">
           <label class="field-label">Valor total de R&amp;S:</label>
-          <input class="field-input" type="text" placeholder="R$" autocomplete="off">
+          <input class="field-input currency-field" type="text" placeholder="R$ 0,00" inputmode="decimal" autocomplete="off">
         </div>
         <div class="field-row">
           <label class="field-label">Taxa de abertura do R&amp;S:</label>
-          <input class="field-input" type="text" placeholder="R$" autocomplete="off">
+          <input class="field-input currency-field" type="text" placeholder="R$ 0,00" inputmode="decimal" autocomplete="off">
         </div>
         <div class="field-row">
           <label class="field-label">Taxa de fechamento do R&amp;S:</label>
-          <input class="field-input" type="text" placeholder="R$" autocomplete="off">
+          <input class="field-input currency-field" type="text" placeholder="R$ 0,00" inputmode="decimal" autocomplete="off">
         </div>
         <div class="field-row">
           <label class="field-label">Taxa da Avaliação Psicológica:</label>
-          <input class="field-input" type="text" placeholder="R$" autocomplete="off">
+          <input class="field-input currency-field" type="text" placeholder="R$ 0,00" inputmode="decimal" autocomplete="off">
         </div>
         <div class="field-row">
           <label class="field-label">Impostos:</label>
-          <input class="field-input" type="text" placeholder="R$ / %" autocomplete="off">
+          <input class="field-input currency-field" type="text" placeholder="R$ 0,00" inputmode="decimal" autocomplete="off">
         </div>
         <div class="field-row">
           <label class="field-label">Valor total referente a esta OS a ser faturado:</label>
-          <input class="field-input" type="text" placeholder="R$" autocomplete="off">
+          <input class="field-input currency-field" type="text" placeholder="R$ 0,00" inputmode="decimal" autocomplete="off">
         </div>
       </div>
 
@@ -354,6 +375,56 @@ function setupDateMask(field) {
   });
 }
 
+/* ── MÁSCARA DE PERCENTUAL (ex.: digitar 5 vira 5%) ── */
+function setupPercentMask(field) {
+  field.addEventListener('input', function() {
+    var raw = this.value.replace(/[^\d,]/g, '');
+    var idx = raw.indexOf(',');
+    if (idx !== -1) {
+      raw = raw.slice(0, idx + 1) + raw.slice(idx + 1).replace(/,/g, '');
+    }
+    this.value = raw ? raw + '%' : '';
+  });
+}
+
+/* ── MÁSCARA DE MOEDA (ex.: digitar 100 vira R$ 100,00) ──
+   Formata o inteiro em tempo real; os centavos (",00") são
+   fixados no blur para não corromper os dígitos digitados. */
+function formatCurrencyInt(intPart) {
+  intPart = intPart.replace(/^0+(?=\d)/, '');
+  return intPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+function setupCurrencyMask(field) {
+  field.addEventListener('input', function() {
+    var raw = this.value.replace(/[^\d,]/g, '');
+    var idx = raw.indexOf(',');
+    var intPart, centsPart = null;
+    if (idx !== -1) {
+      intPart   = raw.slice(0, idx).replace(/\D/g, '');
+      centsPart = raw.slice(idx + 1).replace(/\D/g, '').slice(0, 2);
+    } else {
+      intPart = raw.replace(/\D/g, '');
+    }
+    var formattedInt = formatCurrencyInt(intPart);
+    if (!formattedInt && centsPart === null) { this.value = ''; return; }
+    var result = 'R$ ' + (formattedInt || '0');
+    if (centsPart !== null) result += ',' + centsPart;
+    this.value = result;
+  });
+
+  field.addEventListener('blur', function() {
+    if (!this.value) return;
+    var raw = this.value.replace(/[^\d,]/g, '');
+    var idx = raw.indexOf(',');
+    var intPart   = idx !== -1 ? raw.slice(0, idx) : raw;
+    var centsPart = (idx !== -1 ? raw.slice(idx + 1).replace(/\D/g, '') : '') ;
+    centsPart = (centsPart + '00').slice(0, 2);
+    var formattedInt = formatCurrencyInt(intPart) || '0';
+    this.value = 'R$ ' + formattedInt + ',' + centsPart;
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll(TEXTAREA_CLASSES).forEach(function(ta) {
     ta.addEventListener('input',  function() { autoResize(this); });
@@ -362,6 +433,8 @@ document.addEventListener('DOMContentLoaded', function() {
     autoResize(ta);
   });
   document.querySelectorAll('.date-field').forEach(setupDateMask);
+  document.querySelectorAll('.percent-field').forEach(setupPercentMask);
+  document.querySelectorAll('.currency-field').forEach(setupCurrencyMask);
 });
 
 async function gerarPDFBlob() {
